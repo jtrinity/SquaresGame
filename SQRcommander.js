@@ -1,6 +1,18 @@
 
 //Arena object
 
+//control flags
+var x_pos_press = false,
+	x_neg_press = false,
+	y_pos_press = false,
+	y_neg_press = false,
+	game_paused = false,
+	fast_forward = false;
+
+//physcics variables
+var v_incr = 1;
+var max_vel = 10;
+
 function arena(width, height) {
 	//canvas stuff
 	this.canvas = document.getElementById('canvas');
@@ -164,9 +176,9 @@ function getMinPosWidth(type,x,y){
 		}
 	} else if (type === "y"){
 		if (x.ypos < y.ypos){
-			return x.width;
+			return x.height;
 		} else {
-			return y.width;
+			return y.height;
 		}
 	}
 
@@ -178,7 +190,13 @@ window.main = function () {
   
   if (!game_paused){
   	update();
+  	//update twice per frame if fast mode on
+  	if(fast_forward){
+  		update();
+  	}
   }
+
+
 
 };
 
@@ -192,88 +210,54 @@ arena_1.addItem(my_sqr);
 //put some squares in
 var sqr_colors = ["orange", "yellow", "magenta", "cyan", "red"]
 for (var i = 0; i<5; i++){
-	var bad_sqr = new square("square"+i,100+150*i,400,5,5,100,100, sqr_colors[i]);
+	var bad_sqr = new square("square"+i,100+150*i,500 - i*50,5 - Math.random() * 10,5 - Math.random() * 10,100,100, sqr_colors[i]);
 	arena_1.addItem(bad_sqr);
 }
 
 
-//boolean flags
-var x_pos_press = false;
-var x_neg_press = false;
-var y_pos_press = false;
-var y_neg_press = false;
-
-var game_paused = false;
-
-//physcics variables
-var v_incr = 1;
-var max_vel = 10;
-
-//event listeners
+//keydown events
 document.addEventListener('keydown', function(event) {
-    if(event.keyCode == 37) {
-        x_neg_press = true;
+    switch (event.keyCode) {
+    	case 37:
+    		x_neg_press = true;
+    		break;
+    	case 39:
+    		x_pos_press = true;
+    		break;
+    	case 40:
+    		y_pos_press = true;
+    		break;
+    	case 38:
+    		y_neg_press = true;
+    		break;
+    	case 32:
+    		game_paused = !game_paused;
+    		break;
+    	case 90:
+    		fast_forward = !fast_forward;
+    		break;
     }
 
 });
 
-document.addEventListener('keydown', function(event) {
-    if(event.keyCode == 39) {
-        x_pos_press = true;
-    }
-
-});
-
-document.addEventListener('keydown', function(event) {
-    if(event.keyCode == 40) {
-        y_pos_press = true;
-    }
-
-});
-
-document.addEventListener('keydown', function(event) {
-    if(event.keyCode == 38) {
-        y_neg_press = true;
-    }
-
-});
-
-
+//keyup events
 document.addEventListener('keyup', function(event) {
-    if(event.keyCode == 37) {
-        x_neg_press = false;
+    switch (event.keyCode) {
+    	case 37:
+    		x_neg_press = false;
+    		break;
+    	case 39:
+    		x_pos_press = false;
+    		break;
+    	case 40:
+    		y_pos_press = false;
+    		break;
+    	case 38:
+    		y_neg_press = false;
+    		break;
     }
 
 });
-
-document.addEventListener('keyup', function(event) {
-    if(event.keyCode == 39) {
-        x_pos_press = false;
-    }
-
-});
-
-document.addEventListener('keyup', function(event) {
-    if(event.keyCode == 40) {
-        y_pos_press = false;
-    }
-
-});
-
-document.addEventListener('keyup', function(event) {
-    if(event.keyCode == 38) {
-        y_neg_press = false;
-    }
-
-});
-
-document.addEventListener('keydown', function(event) {
-    if(event.keyCode == 32) {
-        game_paused = !game_paused;
-    }
-
-});
-
 
 
 main(); //Start the cycle.
