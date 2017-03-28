@@ -54,8 +54,8 @@ function arena(width, height) {
 	}
 
 	this.checkCartesianCollision = function(sqr1, sqr2){
-	if (Math.abs(sqr1.xpos - sqr2.xpos) < getMinPosWidth("x",sqr1, sqr2)){
-		if (Math.abs(sqr1.ypos - sqr2.ypos) < getMinPosWidth("y",sqr1, sqr2)){
+	if (Math.abs(sqr1.xpos - sqr2.xpos) <= getMinPosWidth("x",sqr1, sqr2)+1){
+		if (Math.abs(sqr1.ypos - sqr2.ypos) <= getMinPosWidth("y",sqr1, sqr2)+1){
 			if (sqr1.xvel * sqr2.xvel < 0){
 				sqr1.xvel *= -1;
 				sqr2.xvel *= -1;
